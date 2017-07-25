@@ -2,6 +2,7 @@ package io.oasp.application.mtsj.dishmanagement.service.impl.rest;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.MediaType;
 
 import io.oasp.application.mtsj.dishmanagement.logic.api.Dishmanagement;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.CategoryEto;
@@ -13,6 +14,16 @@ import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientEto;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientSearchCriteriaTo;
 import io.oasp.application.mtsj.dishmanagement.service.api.rest.DishmanagementRestService;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
+import org.apache.cxf.helpers.IOUtils;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The service implementation for REST calls in order to execute the logic of component {@link Dishmanagement}.
@@ -93,6 +104,17 @@ public class DishmanagementRestServiceImpl implements DishmanagementRestService 
   public PaginatedListTo<IngredientEto> findIngredientsByPost(IngredientSearchCriteriaTo searchCriteriaTo) {
 
     return this.dishmanagement.findIngredientEtos(searchCriteriaTo);
+  }
+
+  @Override
+  public MultipartBody getDishPicture(long dishId) throws SQLException, IOException {
+    Blob blob = this.dishmanagement.findDishImageBlob(dishId);
+    byte[] data = IOUtils.readBytesFromStream(blob.getBinaryStream());
+
+    List<Attachment> atts = new LinkedList<>();
+    atts.add(new Attachment("binaryObjectEto", MediaType.APPLICATION_JSON, this.dishmanagement.findDishImage(dishId)));
+    atts.add(new Attachment("blob", MediaType.APPLICATION_OCTET_STREAM, new ByteArrayInputStream(data)));
+    return new MultipartBody(atts, true);
   }
 
 }

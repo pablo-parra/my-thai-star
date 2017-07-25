@@ -1,5 +1,6 @@
 package io.oasp.application.mtsj.dishmanagement.logic.impl;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,6 +8,8 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.oasp.application.mtsj.general.logic.api.to.BinaryObjectEto;
+import io.oasp.application.mtsj.general.logic.base.UcManageBinaryObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +30,6 @@ import io.oasp.application.mtsj.dishmanagement.logic.api.to.DishSearchCriteriaTo
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientEto;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientSearchCriteriaTo;
 import io.oasp.application.mtsj.general.logic.base.AbstractComponentFacade;
-import io.oasp.application.mtsj.imagemanagement.logic.api.to.ImageEto;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
 
 /**
@@ -59,6 +61,9 @@ public class DishmanagementImpl extends AbstractComponentFacade implements Dishm
    */
   @Inject
   private IngredientDao ingredientDao;
+
+  @Inject
+  private UcManageBinaryObject binaryObject;
 
   /**
    * The constructor.
@@ -119,12 +124,12 @@ public class DishmanagementImpl extends AbstractComponentFacade implements Dishm
   public DishCto findDish(Long id) {
 
     LOG.debug("Get Dish with id {} from database.", id);
-    DishEntity entity = getDishDao().findOne(id);
+    DishEntity dish = getDishDao().findOne(id);
     DishCto cto = new DishCto();
-    cto.setCategories(getBeanMapper().mapList(entity.getCategories(), CategoryEto.class));
-    cto.setImage(getBeanMapper().map(entity.getImage(), ImageEto.class));
-    cto.setDish(getBeanMapper().map(entity, DishEto.class));
-    cto.setExtras(getBeanMapper().mapList(entity.getExtras(), IngredientEto.class));
+    cto.setCategories(getBeanMapper().mapList(dish.getCategories(), CategoryEto.class));
+    cto.setImage(this.binaryObject.findBinaryObject(dish.getImageId()));
+    cto.setDish(getBeanMapper().map(dish, DishEto.class));
+    cto.setExtras(getBeanMapper().mapList(dish.getExtras(), IngredientEto.class));
     return cto;
   }
 
@@ -138,7 +143,7 @@ public class DishmanagementImpl extends AbstractComponentFacade implements Dishm
     for (DishEntity dish : searchResult.getResult()) {
       DishCto cto = new DishCto();
       cto.setDish(getBeanMapper().map(dish, DishEto.class));
-      cto.setImage(getBeanMapper().map(dish.getImage(), ImageEto.class));
+      cto.setImage(this.binaryObject.findBinaryObject(dish.getImageId()));
       cto.setCategories(getBeanMapper().mapList(dish.getCategories(), CategoryEto.class));
       cto.setExtras(getBeanMapper().mapList(dish.getExtras(), IngredientEto.class));
       ctos.add(cto);
@@ -279,4 +284,31 @@ public class DishmanagementImpl extends AbstractComponentFacade implements Dishm
     return this.ingredientDao;
   }
 
+  @Override
+  public BinaryObjectEto findDishImage(Long dishId){
+    DishCto dish = findDish(dishId);
+    if (dish != null){
+      return getUcManageBinaryObject().findBinaryObject(dish.getImage().getId());
+    }else{
+      return null;
+    }
+  }
+
+  public Blob findDishImageBlob(Long dishId){
+    DishCto dish = findDish(dishId);
+    if (dish != null){
+      return getUcManageBinaryObject().getBinaryObjectBlob(dish.getImage().getId());
+    }else{
+      return null;
+    }
+  }
+
+
+  /**
+   * @return ucManageBinaryObject
+   */
+  public UcManageBinaryObject getUcManageBinaryObject() {
+
+    return this.binaryObject;
+  }
 }

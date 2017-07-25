@@ -7,7 +7,10 @@ import io.oasp.application.mtsj.dishmanagement.logic.api.to.DishEto;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.DishSearchCriteriaTo;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientEto;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientSearchCriteriaTo;
+import io.oasp.application.mtsj.general.logic.api.to.BinaryObjectEto;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
+
+import java.sql.Blob;
 
 /**
  * Interface for Dishmanagement component.
@@ -110,4 +113,7 @@ public interface Dishmanagement {
    */
   IngredientEto saveIngredient(IngredientEto ingredient);
 
+  BinaryObjectEto findDishImage(Long dishId);
+
+  Blob findDishImageBlob(Long dishId);
 }

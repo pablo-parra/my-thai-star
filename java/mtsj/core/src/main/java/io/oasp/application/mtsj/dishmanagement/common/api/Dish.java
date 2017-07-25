@@ -20,6 +20,6 @@ public interface Dish extends ApplicationEntity {
 
   public Long getImageId();
 
-  public void setImageId(Long idImage);
+  public void setImageId(Long imageId);
 
 }

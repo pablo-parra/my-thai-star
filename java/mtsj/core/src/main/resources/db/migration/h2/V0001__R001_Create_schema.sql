@@ -93,17 +93,6 @@ CREATE TABLE Category (
   CONSTRAINT PK_Category PRIMARY KEY(id),
 );
 
--- *** Image ***
-CREATE TABLE Image (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  modificationCounter INTEGER NOT NULL,
-  name VARCHAR(255),
-  content VARCHAR(2147483647),
-  contentType INTEGER,
-  mimeType VARCHAR(255),
-  CONSTRAINT PK_Image PRIMARY KEY(id)
-);
-
 -- *** Dish ***
 CREATE TABLE Dish (
   id BIGINT NOT NULL AUTO_INCREMENT,
@@ -111,9 +100,8 @@ CREATE TABLE Dish (
   name VARCHAR (255),
   description VARCHAR (4000),
   price DECIMAL (16,10),
-  idImage BIGINT UNIQUE NOT NULL,
-  CONSTRAINT PK_Dish PRIMARY KEY(id),
-  CONSTRAINT FK_Dish_idImage FOREIGN KEY(idImage) REFERENCES Image(id) NOCHECK,
+  imageId BIGINT UNIQUE NOT NULL,
+  CONSTRAINT PK_Dish PRIMARY KEY(id)
 );
 
 -- *** DishCategory ***

@@ -17,7 +17,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import io.oasp.application.mtsj.dishmanagement.common.api.Dish;
 import io.oasp.application.mtsj.general.dataaccess.api.ApplicationPersistenceEntity;
-import io.oasp.application.mtsj.imagemanagement.dataaccess.api.ImageEntity;
+
 
 /**
  * The {@link io.oasp.application.mtsj.general.dataaccess.api.ApplicationPersistenceEntity persistent entity} for
@@ -35,7 +35,7 @@ public class DishEntity extends ApplicationPersistenceEntity implements Dish {
 
   private BigDecimal price;
 
-  private ImageEntity image;
+  private Long imageId;
 
   @LazyCollection(LazyCollectionOption.FALSE)
   private List<IngredientEntity> extras;
@@ -92,21 +92,19 @@ public class DishEntity extends ApplicationPersistenceEntity implements Dish {
   }
 
   /**
-   * @return image
+   * @return imageId
    */
-  @OneToOne
-  @JoinColumn(name = "idImage")
-  public ImageEntity getImage() {
+  public Long getImageId() {
 
-    return this.image;
+    return this.imageId;
   }
 
   /**
-   * @param image new value of {@link #getImage}.
+   * @param binaryObjectId new value of {@link #getImageId}.
    */
-  public void setImage(ImageEntity image) {
+  public void setImageId(Long binaryObjectId) {
 
-    this.image = image;
+    this.imageId = binaryObjectId;
   }
 
   /**
@@ -147,28 +145,6 @@ public class DishEntity extends ApplicationPersistenceEntity implements Dish {
   public void setCategories(List<CategoryEntity> categories) {
 
     this.categories = categories;
-  }
-
-  @Override
-  @Transient
-  public Long getImageId() {
-
-    if (this.image == null) {
-      return null;
-    }
-    return this.image.getId();
-  }
-
-  @Override
-  public void setImageId(Long imageId) {
-
-    if (imageId == null) {
-      this.image = null;
-    } else {
-      ImageEntity imageEntity = new ImageEntity();
-      imageEntity.setId(imageId);
-      this.image = imageEntity;
-    }
   }
 
 }

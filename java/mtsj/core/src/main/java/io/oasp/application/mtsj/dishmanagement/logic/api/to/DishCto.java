@@ -3,7 +3,8 @@ package io.oasp.application.mtsj.dishmanagement.logic.api.to;
 import java.util.List;
 
 import io.oasp.application.mtsj.general.common.api.to.AbstractCto;
-import io.oasp.application.mtsj.imagemanagement.logic.api.to.ImageEto;
+import io.oasp.application.mtsj.general.logic.api.to.BinaryObjectEto;
+
 
 /**
  * Composite transport object of Dish
@@ -14,7 +15,7 @@ public class DishCto extends AbstractCto {
 
   private DishEto dish;
 
-  private ImageEto image;
+  private BinaryObjectEto image;
 
   private List<IngredientEto> extras;
 
@@ -53,15 +54,15 @@ public class DishCto extends AbstractCto {
   /**
    * @return image
    */
-  public ImageEto getImage() {
+  public BinaryObjectEto getImage() {
 
     return image;
   }
 
   /**
-   * @param image new value of {@link #getimage}.
+   * @param image new value of {@link #getImage}.
    */
-  public void setImage(ImageEto image) {
+  public void setImage(BinaryObjectEto image) {
 
     this.image = image;
   }

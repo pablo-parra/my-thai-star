@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import io.oasp.application.mtsj.dishmanagement.logic.api.Dishmanagement;
@@ -20,6 +21,9 @@ import io.oasp.application.mtsj.dishmanagement.logic.api.to.DishSearchCriteriaTo
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientEto;
 import io.oasp.application.mtsj.dishmanagement.logic.api.to.IngredientSearchCriteriaTo;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * The service interface for REST calls in order to execute the logic of component {@link Dishmanagement}.
@@ -98,7 +102,7 @@ public interface DishmanagementRestService {
   public void deleteDish(@PathParam("id") long id);
 
   /**
-   * Delegates to {@link Dishmanagement#findDishEtos}.
+   * Delegates to {@link Dishmanagement#findDishCtos}.
    *
    * @param searchCriteriaTo the pagination and search criteria to be used for finding dishs.
    * @return the {@link PaginatedListTo list} of matching {@link DishEto}s.
@@ -147,4 +151,8 @@ public interface DishmanagementRestService {
   @POST
   public PaginatedListTo<IngredientEto> findIngredientsByPost(IngredientSearchCriteriaTo searchCriteriaTo);
 
+  @Produces("multipart/mixed")
+  @GET
+  @Path("/dish/{id}/image")
+  public MultipartBody getDishPicture(@PathParam("id") long dishId) throws SQLException, IOException;
 }

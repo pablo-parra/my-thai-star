@@ -3,13 +3,7 @@ package io.oasp.application.mtsj.bookingmanagement.dataaccess.api;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
@@ -54,7 +48,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
 
   private TableEntity table;
 
-  private OrderEntity order;
+  private Long orderId;
 
   private UserEntity user;
 
@@ -85,7 +79,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param name new value of {@link #getname}.
+   * @param name new value of {@link #getName}.
    */
   @Override
   public void setName(String name) {
@@ -103,7 +97,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param bookingToken new value of {@link #getbookingToken}.
+   * @param bookingToken new value of {@link #getBookingToken}.
    */
   @Override
   public void setBookingToken(String bookingToken) {
@@ -121,7 +115,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param comments new value of {@link #getcomments}.
+   * @param comments new value of {@link #getComment}.
    */
   @Override
   public void setComment(String comments) {
@@ -139,7 +133,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param bookingDate new value of {@link #getbookingDate}.
+   * @param bookingDate new value of {@link #getBookingDate}.
    */
   @Override
   public void setBookingDate(Timestamp bookingDate) {
@@ -157,7 +151,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param expirationDate new value of {@link #getexpirationDate}.
+   * @param expirationDate new value of {@link #getExpirationDate}.
    */
   @Override
   public void setExpirationDate(Timestamp expirationDate) {
@@ -175,7 +169,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param creationDate new value of {@link #getcreationDate}.
+   * @param creationDate new value of {@link #getCreationDate}.
    */
   @Override
   public void setCreationDate(Timestamp creationDate) {
@@ -193,7 +187,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param canceled new value of {@link #getcanceled}.
+   * @param canceled new value of {@link #getCanceled}.
    */
   @Override
   public void setCanceled(Boolean canceled) {
@@ -212,7 +206,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param table new value of {@link #gettable}.
+   * @param table new value of {@link #getTable}.
    */
   public void setTable(TableEntity table) {
 
@@ -229,7 +223,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param invitedGuests new value of {@link #getinvitedGuests}.
+   * @param invitedGuests new value of {@link #getInvitedGuests}.
    */
   public void setInvitedGuests(List<InvitedGuestEntity> invitedGuests) {
 
@@ -246,7 +240,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param type new value of {@link #gettype}.
+   * @param bookingType new value of {@link #getBookingType}.
    */
   @Override
   public void setBookingType(BookingType bookingType) {
@@ -289,44 +283,39 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
     }
   }
 
-  /**
-   * @return order
-   */
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "idOrder")
-  public OrderEntity getOrder() {
-
-    return this.order;
-  }
-
-  /**
-   * @param order new value of {@link #getorder}.
-   */
-  public void setOrder(OrderEntity order) {
-
-    this.order = order;
-  }
+//  /**
+//   * @return order
+//   */
+//  @OneToOne(fetch = FetchType.EAGER)
+//  @JoinColumn(name = "idOrder")
+//  public OrderEntity getOrder() {
+//
+//    return this.order;
+//  }
+//
+//  /**
+//   * @param order new value of {@link #getOrder}.
+//   */
+//  public void setOrder(OrderEntity order) {
+//
+//    this.order = order;
+//  }
 
   @Override
-  @Transient
+  //@Transient
+  @Column(name = "orderId")
   public Long getOrderId() {
 
-    if (this.order == null) {
+    if (this.orderId == null) {
       return null;
     }
-    return this.order.getId();
+    return this.orderId;
   }
 
   @Override
   public void setOrderId(Long orderId) {
 
-    if (orderId == null) {
-      this.order = null;
-    } else {
-      OrderEntity orderEntity = new OrderEntity();
-      orderEntity.setId(orderId);
-      this.order = orderEntity;
-    }
+    this.orderId = orderId;
   }
 
   /**
@@ -339,7 +328,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param orders new value of {@link #getorders}.
+   * @param orders new value of {@link #getOrders}.
    */
   public void setOrders(List<OrderEntity> orders) {
 
@@ -355,7 +344,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param assistants new value of {@link #getassistants}.
+   * @param assistants new value of {@link #getAssistants}.
    */
   public void setAssistants(Integer assistants) {
 
@@ -373,7 +362,7 @@ public class BookingEntity extends ApplicationPersistenceEntity implements Booki
   }
 
   /**
-   * @param user new value of {@link #getuser}.
+   * @param user new value of {@link #getUser}.
    */
   public void setUser(UserEntity user) {
 

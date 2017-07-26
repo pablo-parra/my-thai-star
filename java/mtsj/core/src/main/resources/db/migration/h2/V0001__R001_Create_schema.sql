@@ -50,7 +50,7 @@ CREATE TABLE Booking (
   canceled BOOLEAN NOT NULL DEFAULT ((0)) ,
   bookingType INTEGER,
   idTable BIGINT,
-  idOrder BIGINT,
+  orderId BIGINT,
   assistants INTEGER,
   CONSTRAINT PK_Booking PRIMARY KEY(id),
   CONSTRAINT FK_Booking_idUser FOREIGN KEY(idUser) REFERENCES User(id) NOCHECK,
